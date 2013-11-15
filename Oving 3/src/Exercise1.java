@@ -43,21 +43,21 @@ public class Exercise1 {
             LOOP:
             while(!queue.isEmpty()) {
                 int item = queue.poll();
-                for(int m : neighbour[item]) {
+                for(int value : neighbour[item]) {
                     // There is available capacity,
                     // and v is not seen before in search
-                    if(capacity[item][m] - F[item][m] > 0 && parent[m] == -1) {
-                        parent[m] = item;
-                        pathCapacity[m] = Math.min(pathCapacity[m], capacity[item][m] - F[item][m]);
-                        if(m != sink) {
+                    if(capacity[item][value] - F[item][value] > 0 && parent[value] == -1) {
+                        parent[value] = item;
+                        pathCapacity[value] = Math.min(pathCapacity[value], capacity[item][value] - F[item][value]);
+                        if(value != sink) {
                             queue.offer(sink);
                         } else {
                             // Backtrack search, and write flow
-                            while(parent[m] != m) {
-                                item = parent[m];
-                                F[item][m] += pathCapacity[sink];
-                                F[m][item] -= pathCapacity[sink];
-                                m = item;
+                            while(parent[value] != value) {
+                                item = parent[value];
+                                F[item][value] += pathCapacity[sink];
+                                F[value][item] -= pathCapacity[sink];
+                                value = item;
                             }
                             break LOOP;
                         }
@@ -69,9 +69,9 @@ public class Exercise1 {
                 for (int i : F[source]) {
                     sum += i;
                 }
-                prettyPrint(F);
                 return sum;
             }
+            prettyPrint(F);
         }
     }
 
@@ -106,7 +106,9 @@ public class Exercise1 {
                     y = 0;
                 }
                 capacity[x][y] = number;
-                neighbour[x][y] = 1;
+                if(number != 0) {
+                    neighbour[x][y] = 1;
+                }
                 //System.out.println("Adding "+number+" to capacity["+x+"]["+y+"].");
                 y++;
             }
