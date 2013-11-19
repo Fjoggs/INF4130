@@ -42,22 +42,22 @@ public class Exercise1 {
             queue.offer(source);
             LOOP:
             while(!queue.isEmpty()) {
-                int item = queue.poll();
-                for(int value : neighbour[item]) {
+                int firstInQueue = queue.poll();
+                for(int value : neighbour[firstInQueue]) {
                     // There is available capacity,
                     // and v is not seen before in search
-                    if(capacity[item][value] - F[item][value] > 0 && parent[value] == -1) {
-                        parent[value] = item;
-                        pathCapacity[value] = Math.min(pathCapacity[value], capacity[item][value] - F[item][value]);
+                    if(capacity[firstInQueue][value] - F[firstInQueue][value] > 0 && parent[value] == -1) {
+                        parent[value] = firstInQueue;
+                        pathCapacity[value] = Math.min(pathCapacity[value], capacity[firstInQueue][value] - F[firstInQueue][value]);
                         if(value != sink) {
                             queue.offer(sink);
                         } else {
                             // Backtrack search, and write flow
                             while(parent[value] != value) {
-                                item = parent[value];
-                                F[item][value] += pathCapacity[sink];
-                                F[value][item] -= pathCapacity[sink];
-                                value = item;
+                                firstInQueue = parent[value];
+                                F[firstInQueue][value] += pathCapacity[sink];
+                                F[value][firstInQueue] -= pathCapacity[sink];
+                                value = firstInQueue;
                             }
                             break LOOP;
                         }
@@ -69,9 +69,9 @@ public class Exercise1 {
                 for (int i : F[source]) {
                     sum += i;
                 }
+                prettyPrint(F);
                 return sum;
             }
-            prettyPrint(F);
         }
     }
 
