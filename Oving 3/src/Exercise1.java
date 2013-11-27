@@ -25,7 +25,8 @@ public class Exercise1 {
 
     public static void main(String[] args) throws FileNotFoundException {
         Exercise1 run = new Exercise1();
-        run.readInput(args[0]);
+        run.readInput("Oving3-input.txt");
+        System.out.println();
         run.prettyPrint(capacity);
         run.EdmondsKarp();
     }
@@ -45,7 +46,8 @@ public class Exercise1 {
                 int firstInQueue = queue.poll();
                 for(int value : neighbour[firstInQueue]) {
                     // There is available capacity,
-                    // and v is not seen before in search
+                    // and value is not seen before in search
+                	System.out.println("The value is now "+value);
                     if(capacity[firstInQueue][value] - F[firstInQueue][value] > 0 && parent[value] == -1) {
                         parent[value] = firstInQueue;
                         pathCapacity[value] = Math.min(pathCapacity[value], capacity[firstInQueue][value] - F[firstInQueue][value]);
@@ -107,7 +109,13 @@ public class Exercise1 {
                 }
                 capacity[x][y] = number;
                 if(number != 0) {
-                    neighbour[x][y] = 1;
+                	for(int i=0;i<vertices;i++) {
+                		if(neighbour[x][i]==0) {
+                			neighbour[x][i] = y;
+                			System.out.println("Adding "+y+" to "+x+"'s neighbour list.");
+                			break;
+                		}
+                	}
                 }
                 //System.out.println("Adding "+number+" to capacity["+x+"]["+y+"].");
                 y++;
@@ -115,6 +123,7 @@ public class Exercise1 {
         } finally {
             in.close();
         }
+        prettyPrint(neighbour);
     }
 
     public void writeOutput() {
