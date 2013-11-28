@@ -1,3 +1,4 @@
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.*;
 
 /**
@@ -14,6 +15,7 @@ public class EdmondsKarp {
     int[][] F;
     int[] P; //Parent table
     int[] M; //Capacity of found path to node.
+    boolean[] cut;
     int s;
     int t;
     int f;
@@ -39,6 +41,7 @@ public class EdmondsKarp {
         F = new int[n][n];
         P = new int[n];
         M = new int[n];
+        cut = new boolean[n];
         doEdmondsKarp();
         prettyPrint();
     }
@@ -58,6 +61,9 @@ public class EdmondsKarp {
             while(v!=s) {
                 int u = P[v];
                 F[u][v] += m;
+                if(F[u][v]!=0) {
+                    System.out.println("Node is now: "+v);
+                }
                 //F[v][u] -= m;
                 v = u;
             }
@@ -91,6 +97,7 @@ public class EdmondsKarp {
     }
 
     public void prettyPrint() {
+        //Collections.sort(cut);
         System.out.println(f);
         for(int i=0;i<n;i++) {
             for(int j=0;j<n;j++) {
@@ -98,7 +105,30 @@ public class EdmondsKarp {
             }
             System.out.println();
         }
-        System.out.println();
+//        for(int i=0;i<P.length;i++) {
+//            System.out.print(P[i]+" ");
+//        }
+        System.out.println(findCut());
         System.out.println(count-1);
+    }
+
+    private String findCut() {
+        String theCut = "";
+        cut[s] = true; //source skal være med.
+        locateCut(s); //starter det rekursive kallet ved sourcen.
+        for (int i = 1; i <= n; i++) {
+            if (cut[i-1])
+                theCut = theCut + i + " ";
+        }
+        return theCut;
+    }
+
+    private void locateCut(int current) {
+        for (int v: E[current]) {
+            if(C[current][v] - F[current][v] > 0 && !cut[v]) {
+                cut[v] = true;
+                locateCut(v);
+            }
+        }
     }
 }
