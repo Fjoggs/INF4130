@@ -25,10 +25,13 @@ public class Exercise1 {
 
     public static void main(String[] args) throws FileNotFoundException {
         Exercise1 run = new Exercise1();
-        run.readInput("Oving3-input.txt");
-        System.out.println();
-        run.prettyPrint(capacity);
-        run.EdmondsKarp();
+        run.readInput("test5-in.txt");
+        //run.readInput("Oving3-input.txt");
+        EdmondsKarp maxFlow = new EdmondsKarp(capacity, neighbour, source, sink, vertices);
+        //run.prettyPrint(capacity);
+        //System.out.println();
+        //run.prettyPrint(neighbour);
+        //run.EdmondsKarp();
     }
 
     public int EdmondsKarp () {
@@ -44,15 +47,18 @@ public class Exercise1 {
             LOOP:
             while(!queue.isEmpty()) {
                 int firstInQueue = queue.poll();
+                //System.out.println("fistInQueue is now "+firstInQueue+".");
                 for(int value : neighbour[firstInQueue]) {
+                    //System.out.println("Value is now "+value+".");
                     // There is available capacity,
                     // and value is not seen before in search
-                	System.out.println("The value is now "+value);
                     if(capacity[firstInQueue][value] - F[firstInQueue][value] > 0 && parent[value] == -1) {
                         parent[value] = firstInQueue;
                         pathCapacity[value] = Math.min(pathCapacity[value], capacity[firstInQueue][value] - F[firstInQueue][value]);
                         if(value != sink) {
+                            //System.out.println("Offering sink with value "+sink+".");
                             queue.offer(sink);
+                            //System.out.println(queue.toString());
                         } else {
                             // Backtrack search, and write flow
                             while(parent[value] != value) {
@@ -60,18 +66,20 @@ public class Exercise1 {
                                 F[firstInQueue][value] += pathCapacity[sink];
                                 F[value][firstInQueue] -= pathCapacity[sink];
                                 value = firstInQueue;
+                                //prettyPrint(F);
                             }
                             break LOOP;
                         }
                     }
                 }
             }
-            if (parent[sink] == -1) { // We did not find a path to t
+            if (parent[sink] == -1) { // We did not find a path to sink
                 int sum = 0;
                 for (int i : F[source]) {
                     sum += i;
                 }
-                prettyPrint(F);
+                //System.out.println("Printing out the result: ");
+                //prettyPrint(F);
                 return sum;
             }
         }
@@ -101,6 +109,7 @@ public class Exercise1 {
             vertices = in.nextInt();
             capacity = new int[vertices][vertices];
             neighbour = new int[vertices][vertices];
+            sink = vertices-1;
             while(in.hasNext()) {
                 int number = in.nextInt();
                 if(y == vertices) {
@@ -112,7 +121,7 @@ public class Exercise1 {
                 	for(int i=0;i<vertices;i++) {
                 		if(neighbour[x][i]==0) {
                 			neighbour[x][i] = y;
-                			System.out.println("Adding "+y+" to "+x+"'s neighbour list.");
+                			//System.out.println("Adding "+y+" to "+x+"'s neighbour list.");
                 			break;
                 		}
                 	}
@@ -123,7 +132,6 @@ public class Exercise1 {
         } finally {
             in.close();
         }
-        prettyPrint(neighbour);
     }
 
     public void writeOutput() {
