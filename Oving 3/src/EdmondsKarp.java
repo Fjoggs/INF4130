@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -93,16 +91,12 @@ public class EdmondsKarp {
     }
 
     public void prettyPrint() {
-        Arrays.sort(M);
         System.out.println(f);
         for(int i=0;i<n;i++) {
             for(int j=0;j<n;j++) {
                 System.out.print(F[i][j]+" ");
             }
             System.out.println();
-        }
-        for(int i=0;i<M.length-1;i++) {
-            System.out.print(M[i] + " ");
         }
         System.out.println();
         System.out.println(count-1);

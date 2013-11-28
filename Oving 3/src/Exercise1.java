@@ -25,64 +25,9 @@ public class Exercise1 {
 
     public static void main(String[] args) throws FileNotFoundException {
         Exercise1 run = new Exercise1();
-        run.readInput("test5-in.txt");
-        //run.readInput("Oving3-input.txt");
+        //run.readInput("test5-in.txt");
+        run.readInput("Oving3-input.txt");
         EdmondsKarp maxFlow = new EdmondsKarp(capacity, neighbour, source, sink, vertices);
-        //run.prettyPrint(capacity);
-        //System.out.println();
-        //run.prettyPrint(neighbour);
-        //run.EdmondsKarp();
-    }
-
-    public int EdmondsKarp () {
-        int[][] F = new int[vertices][vertices];
-        while(true) {
-            int[] parent = new int[vertices];
-            Arrays.fill(parent, -1);
-            parent[source] = source;
-            int[] pathCapacity = new int[vertices];
-            pathCapacity[source] = Integer.MAX_VALUE;
-            Queue<Integer> queue = new LinkedList<Integer>();
-            queue.offer(source);
-            LOOP:
-            while(!queue.isEmpty()) {
-                int firstInQueue = queue.poll();
-                //System.out.println("fistInQueue is now "+firstInQueue+".");
-                for(int value : neighbour[firstInQueue]) {
-                    //System.out.println("Value is now "+value+".");
-                    // There is available capacity,
-                    // and value is not seen before in search
-                    if(capacity[firstInQueue][value] - F[firstInQueue][value] > 0 && parent[value] == -1) {
-                        parent[value] = firstInQueue;
-                        pathCapacity[value] = Math.min(pathCapacity[value], capacity[firstInQueue][value] - F[firstInQueue][value]);
-                        if(value != sink) {
-                            //System.out.println("Offering sink with value "+sink+".");
-                            queue.offer(sink);
-                            //System.out.println(queue.toString());
-                        } else {
-                            // Backtrack search, and write flow
-                            while(parent[value] != value) {
-                                firstInQueue = parent[value];
-                                F[firstInQueue][value] += pathCapacity[sink];
-                                F[value][firstInQueue] -= pathCapacity[sink];
-                                value = firstInQueue;
-                                //prettyPrint(F);
-                            }
-                            break LOOP;
-                        }
-                    }
-                }
-            }
-            if (parent[sink] == -1) { // We did not find a path to sink
-                int sum = 0;
-                for (int i : F[source]) {
-                    sum += i;
-                }
-                //System.out.println("Printing out the result: ");
-                //prettyPrint(F);
-                return sum;
-            }
-        }
     }
 
     public void readInput(String fileName) throws FileNotFoundException {
@@ -136,14 +81,5 @@ public class Exercise1 {
 
     public void writeOutput() {
 
-    }
-
-    public void prettyPrint(int[][] printArray) {
-        for(int i=0;i<vertices;i++) {
-            for(int j=0;j<vertices;j++) {
-                System.out.print(printArray[i][j]);
-            }
-            System.out.println();
-        }
     }
 }
