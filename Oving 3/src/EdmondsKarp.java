@@ -20,6 +20,7 @@ public class EdmondsKarp {
     int t;
     int f;
     int n;
+    int count;
 
     /**
      *
@@ -36,6 +37,7 @@ public class EdmondsKarp {
         this.t = t;
         this.n = n;
         f = 0;
+        count = 0;
         F = new int[n][n];
         P = new int[n];
         M = new int[n];
@@ -46,6 +48,7 @@ public class EdmondsKarp {
     public void doEdmondsKarp() {
         while(true) {
             int m = doBFS();
+            count++;
             if(m==0) {
                 break;
             }
@@ -57,7 +60,7 @@ public class EdmondsKarp {
             while(v!=s) {
                 int u = P[v];
                 F[u][v] += m;
-                F[v][u] -= m;
+                //F[v][u] -= m;
                 v = u;
             }
         }
@@ -98,8 +101,10 @@ public class EdmondsKarp {
             }
             System.out.println();
         }
-        for(int i=0;i<M.length;i++) {
-            System.out.print(M[i]+" ");
+        for(int i=0;i<M.length-1;i++) {
+            System.out.print(M[i] + " ");
         }
+        System.out.println();
+        System.out.println(count-1);
     }
 }
